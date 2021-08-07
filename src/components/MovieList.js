@@ -1,9 +1,12 @@
-const MovieList = ({movies}) => {
+import MovieItem from './MovieItem';
+const MovieList = ({ movies }) => {
 
     return (
-        <ul>
-          {movies.map(movie => <li key={movie.imbID}>{ movie.Title}</li>)}
-        </ul>
+        <div className='row'>
+            {
+                movies.map(movie =>  <MovieItem movie={movie} />)
+            }
+        </div>
     );
 }
 export default MovieList;
