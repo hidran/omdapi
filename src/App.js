@@ -3,6 +3,7 @@
 import './App.css';
 import {useState, useEffect} from 'react';
 import MovieList from './components/MovieList';
+import { Navbar } from './components/Navbar';
 const APIKEY = '4cb9def9';
 
 
@@ -35,12 +36,15 @@ function App() {
   }, []);
 
   return (
+    <>
+    <Navbar/>
     <div className="App container-fluid">
       <header className="App-header">
         <h1> MY FAVORITE MOVIES</h1>
         <MovieList movies={movies} />
       </header>
-    </div>
+      </div>
+      </>
   );
 }
 
