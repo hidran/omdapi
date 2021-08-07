@@ -2,6 +2,7 @@
 
 import './App.css';
 import {useState, useEffect} from 'react';
+import MovieList from './components/MovieList';
 const APIKEY = '4cb9def9';
 
 
@@ -34,12 +35,10 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className="App container-fluid">
       <header className="App-header">
         <h1> MY FAVORITE MOVIES</h1>
-        <ul>
-          {movies.map(movie => <li key={movie.imbID}>{ movie.Title}</li>)}
-        </ul>
+        <MovieList movies={movies} />
       </header>
     </div>
   );
