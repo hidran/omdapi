@@ -1,10 +1,10 @@
 import MovieItem from './MovieItem';
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies,onSelectMovie }) => {
 
     return (
         <div className='row d-flex justify-content-center'>
             {
-                movies.map(movie =>  <MovieItem key={movie.imdbID} movie={movie} />)
+                movies.map(movie =>  <MovieItem onSelectMovie = {onSelectMovie} key={movie.imdbID} movie={movie} />)
             }
         </div>
     );

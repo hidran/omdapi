@@ -4,29 +4,31 @@ import './App.css';
 import {useState, useEffect} from 'react';
 import MovieList from './components/MovieList';
 import { Navbar } from './components/Navbar';
-const APIKEY = '4cb9def9';
+import MovieDetail from './components/MovieDetail';
+import { fetchMovieById, fetchMovies} from './utils';
 
 
-
-const APIURL = 'https://www.omdbapi.com';
-
-const fetchMovies = async (search = 'The godfather') => {
-  if (search.length < 3) {
-    return;
-  }
-  const response = await fetch(APIURL + '?apikey=' + APIKEY + '&s=' + search).then(res => res.json());
-  const { Error, Search: movies, totalResults: totalCount } = response;
-  
-  return { movies, totalCount, Error: Error ?? '' };
-}
 
 
 function App() {
-     
+   
   const [movies, setMovies] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState('');
+  const [errorDetail, setErrorDetail] = useState('');
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
+  const selectMovie = async (movie) => {
+    setSelectedMovie(movie);
+    const newMovie = await fetchMovieById(movie.imdbID);
+     if (newMovie.Error) {
+       setErrorDetail(newMovie.Error);
+        setSelectedMovie(null); 
+     } else {
+       setSelectedMovie(newMovie); 
+     }
+   
+  };
   const callApi = async (search = '') => {
 
     const data = await fetchMovies(search);
@@ -35,6 +37,7 @@ function App() {
    
    if (!data.Error.length) {
      setMovies(data.movies);
+     setSelectedMovie(data.movies[0])
      setTotalCount(data.totalCount);
    } else {
      setTotalCount(0);
@@ -58,8 +61,10 @@ function App() {
       
         </header>
         {
-          !error ? <MovieList movies={movies} /> : <h2>{ error}</h2>
-        } 
+          !error ? <MovieList onSelectMovie={selectMovie} movies={movies} /> : <h2>{ error}</h2>
+        }
+        
+        <MovieDetail error = {errorDetail} movie={selectedMovie }/>
       </div>
       </>
   );
