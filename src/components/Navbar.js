@@ -1,7 +1,7 @@
 import { Menu } from './Menu'
 import { SearchBar } from './SearchBar'
 
-export const Navbar = (params) => {
+export const Navbar = ( {onSearchChange} ) => {
     return (
          <header>
         <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -11,7 +11,7 @@ export const Navbar = (params) => {
               <span className="navbar-toggler-icon" />
             </button>
                     <Menu />
-                    <SearchBar></SearchBar>
+                    <SearchBar onSearchChange= {onSearchChange} ></SearchBar>
           </div>
         </nav>
       </header>

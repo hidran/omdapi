@@ -11,10 +11,13 @@ const APIKEY = '4cb9def9';
 const APIURL = 'https://www.omdbapi.com';
 
 const fetchMovies = async (search = 'The godfather') => {
+  if (search.length < 3) {
+    return;
+  }
   const response = await fetch(APIURL + '?apikey=' + APIKEY + '&s=' + search).then(res => res.json());
-  const { Search: movies, totalResults: totalCount } = response;
-  console.log(response);
-  return { movies, totalCount };
+  const { Error, Search: movies, totalResults: totalCount } = response;
+  
+  return { movies, totalCount, Error: Error ?? '' };
 }
 
 
@@ -22,14 +25,25 @@ function App() {
      
   const [movies, setMovies] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    const callApi = async () => {
-      const data = await fetchMovies();
-      setMovies(data.movies);
-      setTotalCount(data.totalCount);
+  const callApi = async (search = '') => {
+
+    const data = await fetchMovies(search);
+    console.log(data)
+   setError(data.Error);
+   
+   if (!data.Error.length) {
+     setMovies(data.movies);
+     setTotalCount(data.totalCount);
+   } else {
+     setTotalCount(0);
+     setMovies([]);
+   }
     }
-    callApi();
+  useEffect(() => {
+   
+    callApi('Godfather');
     return () => {
      
     }
@@ -37,12 +51,15 @@ function App() {
 
   return (
     <>
-    <Navbar/>
+      <Navbar onSearchChange={callApi }/>
     <div className="App container-fluid">
       <header className="App-header">
-        <h1> MY FAVORITE MOVIES</h1>
-        <MovieList movies={movies} />
-      </header>
+        <h1> MY FAVORITE MOVIES ({totalCount})</h1>
+      
+        </header>
+        {
+          !error ? <MovieList movies={movies} /> : <h2>{ error}</h2>
+        } 
       </div>
       </>
   );
